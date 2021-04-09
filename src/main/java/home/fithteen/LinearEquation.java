@@ -42,6 +42,7 @@ class LinearEquation {
                     .build();
             right = new ExpressionBuilder("1")
                     .build();
+            count = 10;
         }
 
 
@@ -65,6 +66,9 @@ class LinearEquation {
         LinearEquation.SIGMA = SIGMA;
     }
 
+    public boolean isMaxCount() { return count>=10; }
+
+
 
     private String findVariable(final String expr){
 
@@ -85,7 +89,7 @@ class LinearEquation {
         double x = nextX(x0);
 
 
-        while( Math.abs(x - x0) > SIGMA){
+        while( Math.abs(x - x0) > SIGMA  ){
 
             x0=x;
 
