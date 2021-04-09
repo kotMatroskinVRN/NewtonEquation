@@ -10,16 +10,11 @@ class Gui extends  JFrame{
 
 
     private final String HEADER  = "Решение Уравнений";
-
-
-    //private final JTextField    task = new JTextField("" , 24);
     private final JTextField    task = new JTextField("");
-    //private final JTextArea textArea = new JTextArea(   HEADER + " :\n\n" , 25 , 29 );
     private final JTextArea textArea = new JTextArea(   HEADER + " :\n\n"  );
 
     private boolean round = true ;
 
-    JSplitPane topPanel;
 
 
     Gui() {
@@ -29,6 +24,7 @@ class Gui extends  JFrame{
         int y = 480;
         setBounds( 50 , 50 , (int)(y * RATIO)  , y);
 
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         textArea.setEditable(false);
@@ -37,17 +33,23 @@ class Gui extends  JFrame{
         jsp.setHorizontalScrollBar(null);
 
         JButton button = new JButton("Решить");
-        topPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT ,  task ,  button);
-        topPanel.setDividerSize(0);
 
 
 
-
+        JPanel north = new JPanel();
         JPanel west  = new JPanel();
         JPanel east  = new JPanel();
         JPanel south = new JPanel();
 
-        add(topPanel , BorderLayout.NORTH);
+        BorderLayout borderLayout = new BorderLayout();
+        //borderLayout.setHgap(5);
+
+        north.setLayout( borderLayout );
+        north.add(new JPanel() , BorderLayout.WEST);
+        north.add(task , BorderLayout.CENTER);
+        north.add(button , BorderLayout.EAST);
+
+        add(north , BorderLayout.NORTH);
         add(jsp, BorderLayout.CENTER);
         add(west  , BorderLayout.WEST);
         add(east  , BorderLayout.EAST);
@@ -111,10 +113,4 @@ class Gui extends  JFrame{
     }
 
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        topPanel.setDividerLocation( getWidth()-100);
-        //topPanel.repaint();
-    }
 }
