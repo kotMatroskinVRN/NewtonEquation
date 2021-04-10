@@ -21,8 +21,8 @@ class Gui extends  JFrame{
         super();
         setTitle(HEADER);
         double RATIO = 0.5625;
-        int y = 480;
-        setBounds( 50 , 50 , (int)(y * RATIO)  , y);
+        int x = 320;
+        setBounds( 50 , 50 , x , (int)(x / RATIO)  );
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         textArea.setEditable(false);
