@@ -21,7 +21,7 @@ class Gui extends  JFrame{
         super();
         setTitle(HEADER);
         double RATIO = 0.5625;
-        int x = 320;
+        int x = 400;
         setBounds( 50 , 50 , x , (int)(x / RATIO)  );
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
