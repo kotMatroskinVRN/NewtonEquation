@@ -23,8 +23,6 @@ class Gui extends  JFrame{
         double RATIO = 0.5625;
         int y = 480;
         setBounds( 50 , 50 , (int)(y * RATIO)  , y);
-
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         textArea.setEditable(false);
@@ -34,20 +32,22 @@ class Gui extends  JFrame{
 
         JButton button = new JButton("Решить");
 
-
-
         JPanel north = new JPanel();
         JPanel west  = new JPanel();
         JPanel east  = new JPanel();
         JPanel south = new JPanel();
 
-        BorderLayout borderLayout = new BorderLayout();
-        //borderLayout.setHgap(5);
+        JPanel innerNorth = new JPanel();
 
-        north.setLayout( borderLayout );
+        innerNorth.setLayout( new BorderLayout() );
+        innerNorth.add(task , BorderLayout.CENTER);
+        innerNorth.add(button , BorderLayout.EAST);
+
+        north.setLayout( new BorderLayout() );
+        north.add(innerNorth);
         north.add(new JPanel() , BorderLayout.WEST);
-        north.add(task , BorderLayout.CENTER);
-        north.add(button , BorderLayout.EAST);
+        north.add(new JPanel() , BorderLayout.EAST);
+        north.add(new JPanel() , BorderLayout.NORTH);
 
         add(north , BorderLayout.NORTH);
         add(jsp, BorderLayout.CENTER);
@@ -56,8 +56,6 @@ class Gui extends  JFrame{
         add(south , BorderLayout.SOUTH);
 
         ActionListener actionListener = ae -> action();
-
-
         button.addActionListener( actionListener );
         task.addActionListener  ( actionListener );
 
@@ -99,8 +97,7 @@ class Gui extends  JFrame{
                 format ="\n%s\n%s = %." + level + "f \n";
 
             }
-            result =
-                    String.format( format , input , linearEquation.getUnknown() , solution );
+            result =String.format( format , input , linearEquation.getUnknown() , solution );
         }
 
 

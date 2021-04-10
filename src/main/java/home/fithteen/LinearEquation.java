@@ -72,8 +72,6 @@ class LinearEquation {
 
     private String findVariable(final String expr){
 
-        //char[] chars = expr.toCharArray();
-
         for (char c : expr.toCharArray() ){
             if(c>96 && c<123 ) return String.valueOf(c);
         }
@@ -89,19 +87,20 @@ class LinearEquation {
         double x = nextX(x0);
 
 
-        while( Math.abs(x - x0) > SIGMA  ){
+        while( count <10 && Math.abs(x - x0) > SIGMA  ){
 
             x0=x;
 
 
             // prevent division by zero in derivate
-            if (count <10 && (derivative( x0) == 0 ) ){
+            if ( derivative( x0) == 0  ){
                 x0 = count;
                 x = nextX(x0);
 
                 count++;
             }
-            else x -= nextX(x0);
+            else
+                x -= nextX(x0);
 
         }
 
@@ -120,18 +119,19 @@ class LinearEquation {
     }
 
 
-    private double derivative(double x){
+    //private double derivative(double x) throws ArithmeticException {
+    private double derivative(double x)  {
 
         return ( fx(x+SIGMA) - fx(x) )/SIGMA;
     }
 
-    private double fx(double x){
+    //private double fx(double x) throws ArithmeticException {
+    private double fx(double x)  {
         double result;
 
         try{
             result = left.setVariable(unknown,x).evaluate();
         }catch (ArithmeticException e){
-            //result = left.setVariable(unknown,++count).evaluate();
             x0=++count;
             System.out.printf(" Exception fx \nX0 = %.3f COUNT = %d\n" , x0 , count);
             result = fx(x0);
