@@ -4,6 +4,23 @@ package home.fithteen;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+import static java.lang.Math.*;
+
+/**
+ * @author Andrey Manankov
+ * @version 1.0.0
+ *
+ * Class for Equation
+ *
+ * e.g.
+ * x+5 = 10
+ *
+ * '=' must be in equation
+ * must be only one variable - any letter. Only in left part. Variable in right part is not acceptable
+ * ()*\/:+- are possible operations
+ *
+ *
+ */
 class LinearEquation {
 
     private static   double SIGMA = 0.0001   ;
@@ -12,17 +29,40 @@ class LinearEquation {
     private final Expression right;
     private final String unknown;
     private final String equation ;
+    private final String input ;
+
+    //private String textSolution ;
 
     private int count = 0;
     private double x0 = 0 ;
 
+    private double solution ;
+
+    /**
+     * @param equation
+     * string e.g.
+     * x+5 = 10
+     *
+     *
+     * '=' must be in equation
+     * must be only one variable - any letter . Only in left part. Variable in right part is not acceptable
+     * ()*\/:+- are possible operations
+     *
+     */
     LinearEquation( final String equation){
 
+        // saves original input string
+        input = equation;
+
+        // set equation and replace : to /
         this.equation = equation.replaceAll(":", "\\/");
 
-        System.out.println(this.equation);
+        //System.out.println(this.equation);
+        // split equation by '='
         final String[] sides = this.equation.split("=");
 
+        // checks if equation has both sides
+        // set correspondent variables : sides and unknown
         if(sides.length>1){
             unknown = findVariable(sides[0]);
 
@@ -34,6 +74,7 @@ class LinearEquation {
                     .build();
         }
         else {
+            // fill dummy if '=' was not found
             System.out.println("Can't find \"=\"");
             unknown = findVariable("x");
 
@@ -49,26 +90,53 @@ class LinearEquation {
 
     }
 
-    double solution(){
+    /**
+     * Solves equation
+     */
+    void solution(){
 
-        return newton();
+        solution = newton();
 
     }
 
+    /**
+     * @param round true then result is integer , false - accuracy is set by SIGMA
+     * @return result string according to accuracy or "Решений нет!!!"
+     */
+    String getTextSolution( boolean round ){
+        StringBuilder result = new StringBuilder();
+        String format;
 
-    String getUnknown() { return unknown; }
+        // if no solution
+        if( isMaxCount() ) {
+            result.append( "\n").append(input).append("\n");
+            result.append( "Решений нет!!!"  ).append("\n");
 
-    String getEquation() { return equation; }
+        }else{
+            if(round){
+                format ="\n%s\n%s = %.0f \n";
+                solution = round(solution);
+            }
+            else{
+                int level = (int) abs(log10( SIGMA ) );
+                format ="\n%s\n%s = %." + level + "f \n";
 
-    static double getSIGMA() { return SIGMA; }
+            }
+            result.append( String.format( format , input , unknown , solution ) );
+        }
 
+        return result.toString();
+    }
+
+    /**
+     * @param SIGMA set accuracy
+     */
     static void setSIGMA(double SIGMA) {
         LinearEquation.SIGMA = SIGMA;
     }
 
-    public boolean isMaxCount() { return count>=10; }
 
-
+    private  boolean isMaxCount() { return count>=10; }
 
     private String findVariable(final String expr){
 
@@ -141,6 +209,3 @@ class LinearEquation {
     }
 
 }
-
-
-// 6/(2+x)+10=12
