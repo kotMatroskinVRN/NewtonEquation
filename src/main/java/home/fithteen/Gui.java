@@ -2,6 +2,7 @@ package home.fithteen;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -80,7 +81,9 @@ class Gui extends  JFrame{
 
 
         // create Action Listener and set it to button and task field key ENTER
-        ActionListener actionListener = ae -> action();
+        // action must be performed in new Thread , not in EventQueue
+        ActionListener actionListener = new ButtonAction();
+
         button.addActionListener( actionListener );
         task.addActionListener  ( actionListener );
 
@@ -125,12 +128,35 @@ class Gui extends  JFrame{
         // solve the equation
         linearEquation.solution();
 
+        //System.out.println( Thread.currentThread() );
+
         // append text area
         textArea.setText( textArea.getText() + linearEquation.getTextSolution( round ) );
 
         // clear task field
         task.setText("");
 
+        //Thread.currentThread().finalize();
+    }
+
+
+    class ButtonAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if( !task.getText().isEmpty()) {
+                new Thread( new ActionThread() ).start();
+            }
+        }
+    }
+
+    class ActionThread implements Runnable{
+        @Override
+        public void run() {
+            action();
+            // force garbage collector to purge threads from memory
+            // removes previous thread from memory
+            System.gc();
+        }
     }
 
 
