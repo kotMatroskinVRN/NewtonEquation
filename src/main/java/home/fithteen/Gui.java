@@ -16,14 +16,15 @@ import java.awt.event.ActionListener;
  * Result area
  * Margins
  */
-class Gui extends  JFrame{
+class Gui extends  JFrame implements View{
 
+    private final Controller controller;
 
     private final String HEADER  = "Решение Уравнений";
     private final JTextField    task = new JTextField("");
     private final JTextArea textArea = new JTextArea(   HEADER + " :\n\n"  );
+    private final JButton button;
 
-    private boolean round = true ;
 
 
     /**
@@ -31,15 +32,16 @@ class Gui extends  JFrame{
      *
      * setup GUI
      */
-    Gui() {
+    Gui(Controller controller) {
 
         // main window settings
-        super();
         setTitle(HEADER);
         double RATIO = 0.5625;
         int x = 400;
         setBounds( 50 , 50 , x , (int)(x / RATIO)  );
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.controller = controller;
 
         // prevent editiong of result text field
         textArea.setEditable(false);
@@ -49,7 +51,7 @@ class Gui extends  JFrame{
         jsp.setHorizontalScrollBar(null);
 
         // create button "Решить"
-        JButton button = new JButton("Решить");
+        button = new JButton("Решить");
 
         // create margins using empty panels in all sides except center
         JPanel north = new JPanel();
@@ -91,13 +93,7 @@ class Gui extends  JFrame{
         setVisible(true);
     }
 
-    /**
-     * set round to false
-     * make result integer number
-     */
-    void falseRound() {
-        this.round = false;
-    }
+
 
     /**
      * Main action
@@ -110,7 +106,11 @@ class Gui extends  JFrame{
      * contains some examples : 1 2 3 4 0
      * type just number and press ENTER
      */
-    private void action() {
+    @Override
+    public void action() {
+
+        SwingUtilities.invokeLater( () -> showFields(false));
+
 
         // get text from task field
         String input = task.getText().trim();
@@ -122,30 +122,41 @@ class Gui extends  JFrame{
         if(input.equals("4")) input = "(270/y-2)*30 = 7*120";
         if(input.equals("0")) input = "1/x = 0";
 
-        // create equation instance
-        final LinearEquation linearEquation = new LinearEquation(input);
-
-        // solve the equation
-        linearEquation.solution();
-
-        //System.out.println( Thread.currentThread() );
 
         // append text area
-        textArea.setText( textArea.getText() + linearEquation.getTextSolution( round ) );
+        if( !task.getText().isEmpty() ) {
+            String result = textArea.getText() + controller.action(input);
 
-        // clear task field
-        task.setText("");
+            SwingUtilities.invokeLater( () -> textArea.setText(result) );
+        }
 
-        //Thread.currentThread().finalize();
+        SwingUtilities.invokeLater( () -> {
+            showFields(true);
+            task.setText("");
+            task.requestFocusInWindow();
+        });
+
+
+    }
+
+
+    private void showFields(boolean enable){
+
+        if(enable){
+            button.setEnabled(true);
+            task.setEnabled(true);
+        }
+        else {
+            button.setEnabled(false);
+            task.setEnabled(false);
+        }
     }
 
 
     class ButtonAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if( !task.getText().isEmpty()) {
                 new Thread( new ActionThread() ).start();
-            }
         }
     }
 
@@ -153,9 +164,6 @@ class Gui extends  JFrame{
         @Override
         public void run() {
             action();
-            // force garbage collector to purge threads from memory
-            // removes previous thread from memory
-            System.gc();
         }
     }
 

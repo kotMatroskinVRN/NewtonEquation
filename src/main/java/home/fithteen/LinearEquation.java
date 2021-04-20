@@ -21,25 +21,31 @@ import static java.lang.Math.*;
  *
  *
  */
-class LinearEquation {
+class LinearEquation implements Model {
 
-    private static   double SIGMA = 0.0001   ;
+    private double SIGMA = 0.01   ;
+    private boolean round = true ;
 
-    private final Expression left;
-    private final Expression right;
-    private final String unknown;
-    private final String equation ;
-    private final String input ;
+    private Expression left;
+    private Expression right;
+    private String unknown;
+    private String input ;
 
-    //private String textSolution ;
-
-    private int count = 0;
-    private double x0 = 0 ;
+    private int count ;
+    private double x0 ;
 
     private double solution ;
 
+
+    LinearEquation( ){
+
+
+
+
+    }
+
     /**
-     * @param equation
+     * @param input
      * string e.g.
      * x+5 = 10
      *
@@ -49,17 +55,21 @@ class LinearEquation {
      * ()*\/:+- are possible operations
      *
      */
-    LinearEquation( final String equation){
+    @Override
+    public void init(final String input){
+
+        count = 0;
+        x0 = 0;
 
         // saves original input string
-        input = equation;
+        this.input = input;
 
         // set equation and replace : to /
-        this.equation = equation.replaceAll(":", "\\/");
+        String equation = input.replaceAll(":", "\\/");
 
         //System.out.println(this.equation);
         // split equation by '='
-        final String[] sides = this.equation.split("=");
+        final String[] sides = equation.split("=");
 
         // checks if equation has both sides
         // set correspondent variables : sides and unknown
@@ -87,27 +97,27 @@ class LinearEquation {
         }
 
 
-
     }
 
     /**
      * Solves equation
      */
-    void solution(){
+    @Override
+    public void solve(){
 
         solution = newton();
 
     }
 
     /**
-     * @param round true then result is integer , false - accuracy is set by SIGMA
      * @return result string according to accuracy or "Решений нет!!!"
      */
-    String getTextSolution( boolean round ){
+    @Override
+    public String getTextSolution(){
         StringBuilder result = new StringBuilder();
         String format;
 
-        // if no solution
+        // if no solve
         if( isMaxCount() ) {
             result.append( "\n").append(input).append("\n");
             result.append( "Решений нет!!!"  ).append("\n");
@@ -131,10 +141,17 @@ class LinearEquation {
     /**
      * @param SIGMA set accuracy
      */
-    static void setSIGMA(double SIGMA) {
-        LinearEquation.SIGMA = SIGMA;
+    void setSIGMA(double SIGMA) {
+        this.SIGMA = SIGMA;
     }
 
+    /**
+     * set round to false
+     * make result integer number
+     */
+    void falseRound() {
+        this.round = false;
+    }
 
     private  boolean isMaxCount() { return count>=10; }
 
@@ -178,7 +195,7 @@ class LinearEquation {
 
     private double nextX (double x){
         try{
-            return (fx(x) - right.evaluate())/derivative( x);
+            return (fx(x) - right.evaluate())/derivative(x);
         }catch(ArithmeticException e){
             x0 = ++count;
             System.out.printf(" Exception next \nX0 = %.3f COUNT = %d\n" , x0 , count);

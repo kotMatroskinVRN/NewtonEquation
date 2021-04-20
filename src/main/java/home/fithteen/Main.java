@@ -17,27 +17,31 @@ import javax.swing.*;
  */
 public class Main {
 
-   private static Gui gui;
+   //private static Gui gui;
+   private static LinearEquation linearEquation;
 
     public static void main(String[] args) {
 
 
+        linearEquation = new LinearEquation();
+        if(args.length>0){
+            System.out.println("false round");
+            linearEquation.falseRound();
+            linearEquation.setSIGMA( Double.parseDouble(args[0]));
+
+        }
 
 
-        SwingUtilities.invokeLater( () -> {
-            gui = new Gui();
+        ControllerGUI controllerGUI = new ControllerGUI(linearEquation);
 
-            if(args.length>0){
-                System.out.println("false round");
-                gui.falseRound();
-                LinearEquation.setSIGMA( Double.parseDouble(args[0]));
-
-            }
-
-
-        } );
+        SwingUtilities.invokeLater(  () ->  new Gui(controllerGUI) );
 
 
 
+
+    }
+
+    public static LinearEquation getLinearEquation() {
+        return linearEquation;
     }
 }
