@@ -125,7 +125,7 @@ class Gui extends  JFrame implements View{
 
         // append text area
         if( !task.getText().isEmpty() ) {
-            String result = textArea.getText() + controller.action(input);
+            String result = textArea.getText() + controller.action(input , Thread.currentThread() );
 
             SwingUtilities.invokeLater( () -> textArea.setText(result) );
         }

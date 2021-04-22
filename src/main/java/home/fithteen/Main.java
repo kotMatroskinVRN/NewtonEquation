@@ -18,12 +18,12 @@ import javax.swing.*;
 public class Main {
 
    //private static Gui gui;
-   private static LinearEquation linearEquation;
+   //private static LinearEquation linearEquation;
 
     public static void main(String[] args) {
 
 
-        linearEquation = new LinearEquation();
+        LinearEquation linearEquation = new LinearEquation();
         if(args.length>0){
             System.out.println("false round");
             linearEquation.falseRound();
@@ -41,7 +41,4 @@ public class Main {
 
     }
 
-    public static LinearEquation getLinearEquation() {
-        return linearEquation;
-    }
 }
