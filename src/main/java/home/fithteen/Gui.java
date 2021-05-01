@@ -2,8 +2,6 @@ package home.fithteen;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author Manankov Andrey
@@ -18,7 +16,8 @@ import java.awt.event.ActionListener;
  */
 class Gui extends  JFrame implements View{
 
-    private final Controller controller;
+    private final Controller controller ;
+    private final View logConsole ;
 
     private final String HEADER  = "Решение Уравнений";
     private final JTextField    task = new JTextField("");
@@ -42,6 +41,7 @@ class Gui extends  JFrame implements View{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.controller = controller;
+        logConsole = new LogConsole(controller);
 
         // prevent editiong of result text field
         textArea.setEditable(false);
@@ -84,16 +84,19 @@ class Gui extends  JFrame implements View{
 
         // create Action Listener and set it to button and task field key ENTER
         // action must be performed in new Thread , not in EventQueue
-        ActionListener actionListener = new ButtonAction();
+        //ActionListener actionListener = this::actionThread();
+        //ActionEvent actionListener = this::actionThread();
 
-        button.addActionListener( actionListener );
-        task.addActionListener  ( actionListener );
+        button.addActionListener( e -> actionThread() );
+        task.addActionListener  ( e -> actionThread() );
 
         // make main frame visible
         setVisible(true);
     }
 
 
+    @Override
+    public void init(){}
 
     /**
      * Main action
@@ -125,7 +128,13 @@ class Gui extends  JFrame implements View{
 
         // append text area
         if( !task.getText().isEmpty() ) {
-            String result = textArea.getText() + controller.action(input , Thread.currentThread() );
+
+            String resultFromModel = controller.action( input );
+
+            String result = textArea.getText() + resultFromModel;
+
+            logConsole.init( );
+            logConsole.action();
 
             SwingUtilities.invokeLater( () -> textArea.setText(result) );
         }
@@ -153,19 +162,19 @@ class Gui extends  JFrame implements View{
     }
 
 
-    class ButtonAction implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-                new Thread( new ActionThread() ).start();
-        }
-    }
-
-    class ActionThread implements Runnable{
-        @Override
-        public void run() {
-            action();
-        }
-    }
+//    class ButtonAction implements ActionListener {
+//        @Override
+//        public void actionPerformed(ActionEvent e) {
+//                new Thread( new ActionThread() ).start();
+//        }
+//    }
+//
+//    class ActionThread implements Runnable{
+//        @Override
+//        public void run() {
+//            action();
+//        }
+//    }
 
 
 }

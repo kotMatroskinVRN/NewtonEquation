@@ -5,33 +5,43 @@ package home.fithteen;
 public class ControllerGUI implements Controller{
 
     private final Model model;
-    private Thread thread;
+    private String input;
+    //private Thread thread;
 
     ControllerGUI(Model model){
 
         this.model = model;
     }
     @Override
-    public String action(final String input , Thread thread){
+    public String action(final String input ){
 
-        this.thread = thread;
+        //this.thread = thread;
 
         model.init(input);
         model.solve();
+        this.input = input;
 
-        notify();
+        //notify();
 
 
 
         return model.getTextSolution();
     }
-    @Override
-    public void notifyAllViews(){
+//    @Override
+//    public void notifyAllViews(){
+//
+//        //this.notify();
+//    }
 
-        //this.notify();
-    }
+    //Thread getThread(){return thread;}
 
-    Thread getThread(){return thread;}
+     public String getInput(){
+         return input;
+
+     }
+     public String getSolution(){
+         return model.getTextSolution();
+     }
 
 }
 
