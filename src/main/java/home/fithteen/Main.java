@@ -17,24 +17,25 @@ import javax.swing.*;
  */
 public class Main {
 
-   //private static Gui gui;
-   //private static LinearEquation linearEquation;
+   //private static MainView gui;
+   //private static NewtonMethod linearEquation;
 
     public static void main(String[] args) {
 
 
-        LinearEquation linearEquation = new LinearEquation();
+        NewtonMethod newtonMethod = new NewtonMethod();
         if(args.length>0){
             System.out.println("false round");
-            linearEquation.falseRound();
-            linearEquation.setSIGMA( Double.parseDouble(args[0]));
+            newtonMethod.falseRound();
+            newtonMethod.setSIGMA( Double.parseDouble(args[0]));
 
         }
 
 
-        ControllerGUI controllerGUI = new ControllerGUI(linearEquation);
+        ControllerGUI controllerGUI = new ControllerGUI(newtonMethod);
 
-        SwingUtilities.invokeLater(  () ->  new Gui(controllerGUI) );
+        MainView mainView = new MainView(controllerGUI);
+        SwingUtilities.invokeLater(  mainView::init );
 
 
 

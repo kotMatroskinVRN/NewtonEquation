@@ -20,6 +20,6 @@ public class LogConsole implements View {
     }
 
     public void init(){
-        this.solution = controller.getSolution();
+        this.solution = controller.getDTO().getSolution();
     }
 }

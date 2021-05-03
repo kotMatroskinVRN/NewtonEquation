@@ -4,43 +4,28 @@ package home.fithteen;
 
 public class ControllerGUI implements Controller{
 
-    private final Model model;
-    private String input;
-    //private Thread thread;
+    private final ModelEquation modelEquation;
+    private final DataTransferObject data = new DataTransferObject();
 
-    ControllerGUI(Model model){
+    ControllerGUI(ModelEquation modelEquation){
 
-        this.model = model;
+        this.modelEquation = modelEquation;
+    }
+
+
+    @Override
+    public void action(final String input ){
+
+        modelEquation.init(input);
+        modelEquation.solve();
+
+        data.setSolution( modelEquation.getTextSolution() );
+        data.setInput( input );
+
     }
     @Override
-    public String action(final String input ){
-
-        //this.thread = thread;
-
-        model.init(input);
-        model.solve();
-        this.input = input;
-
-        //notify();
-
-
-
-        return model.getTextSolution();
-    }
-//    @Override
-//    public void notifyAllViews(){
-//
-//        //this.notify();
-//    }
-
-    //Thread getThread(){return thread;}
-
-     public String getInput(){
-         return input;
-
-     }
-     public String getSolution(){
-         return model.getTextSolution();
+     public DataTransferObject getDTO(){
+         return data ;
      }
 
 }

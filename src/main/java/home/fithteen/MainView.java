@@ -14,15 +14,15 @@ import java.awt.*;
  * Result area
  * Margins
  */
-class Gui extends  JFrame implements View{
+class MainView extends  JFrame implements View{
 
     private final Controller controller ;
-    private final View logConsole ;
+    private final View[] views ;
 
     private final String HEADER  = "Решение Уравнений";
     private final JTextField    task = new JTextField("");
     private final JTextArea textArea = new JTextArea(   HEADER + " :\n\n"  );
-    private final JButton button;
+    private final JButton button = new JButton("Решить");
 
 
 
@@ -31,7 +31,22 @@ class Gui extends  JFrame implements View{
      *
      * setup GUI
      */
-    Gui(Controller controller) {
+    MainView(Controller controller) {
+
+
+        this.controller = controller;
+
+        views = new View[]{
+                new LogConsole(controller)
+
+        };
+
+    }
+
+
+    @Override
+    public void init(){
+
 
         // main window settings
         setTitle(HEADER);
@@ -40,9 +55,6 @@ class Gui extends  JFrame implements View{
         setBounds( 50 , 50 , x , (int)(x / RATIO)  );
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        this.controller = controller;
-        logConsole = new LogConsole(controller);
-
         // prevent editiong of result text field
         textArea.setEditable(false);
 
@@ -50,8 +62,7 @@ class Gui extends  JFrame implements View{
         JScrollPane jsp = new JScrollPane(textArea);
         jsp.setHorizontalScrollBar(null);
 
-        // create button "Решить"
-        button = new JButton("Решить");
+
 
         // create margins using empty panels in all sides except center
         JPanel north = new JPanel();
@@ -84,19 +95,14 @@ class Gui extends  JFrame implements View{
 
         // create Action Listener and set it to button and task field key ENTER
         // action must be performed in new Thread , not in EventQueue
-        //ActionListener actionListener = this::actionThread();
-        //ActionEvent actionListener = this::actionThread();
 
         button.addActionListener( e -> actionThread() );
         task.addActionListener  ( e -> actionThread() );
 
         // make main frame visible
         setVisible(true);
+
     }
-
-
-    @Override
-    public void init(){}
 
     /**
      * Main action
@@ -112,7 +118,7 @@ class Gui extends  JFrame implements View{
     @Override
     public void action() {
 
-        SwingUtilities.invokeLater( () -> showFields(false));
+        showFields(false);
 
 
         // get text from task field
@@ -129,52 +135,48 @@ class Gui extends  JFrame implements View{
         // append text area
         if( !task.getText().isEmpty() ) {
 
-            String resultFromModel = controller.action( input );
+            controller.action( input );
 
-            String result = textArea.getText() + resultFromModel;
+            appendTextArea( controller.getDTO().getSolution() );
 
-            logConsole.init( );
-            logConsole.action();
+            invokeAllViews();
 
-            SwingUtilities.invokeLater( () -> textArea.setText(result) );
         }
 
-        SwingUtilities.invokeLater( () -> {
             showFields(true);
-            task.setText("");
-            task.requestFocusInWindow();
-        });
+
 
 
     }
 
+    private void appendTextArea( String text){
+        String newText = textArea.getText() + text ;
+        SwingUtilities.invokeLater( () -> textArea.setText(newText) );
+
+    }
 
     private void showFields(boolean enable){
 
-        if(enable){
-            button.setEnabled(true);
-            task.setEnabled(true);
-        }
-        else {
-            button.setEnabled(false);
-            task.setEnabled(false);
-        }
+        SwingUtilities.invokeLater( () -> {
+            button.setEnabled(enable);
+            task.setEnabled(enable);
+
+            if (enable) {
+                task.setText("");
+                task.requestFocusInWindow();
+            }
+        });
     }
 
 
-//    class ButtonAction implements ActionListener {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//                new Thread( new ActionThread() ).start();
-//        }
-//    }
-//
-//    class ActionThread implements Runnable{
-//        @Override
-//        public void run() {
-//            action();
-//        }
-//    }
+    private void invokeAllViews(){
+
+        for( View view : views ){
+            view.init();
+            view.action();
+        }
+
+    }
 
 
 }

@@ -21,7 +21,7 @@ import static java.lang.Math.*;
  *
  *
  */
-class LinearEquation implements Model {
+class NewtonMethod implements ModelEquation {
 
     private double SIGMA = 0.01   ;
     private boolean round = true ;
@@ -37,7 +37,7 @@ class LinearEquation implements Model {
     private double solution ;
 
 
-    LinearEquation( ){
+    NewtonMethod( ){
 
 
 
