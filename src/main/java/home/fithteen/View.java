@@ -3,7 +3,6 @@ package home.fithteen;
 
 public interface View {
 
-
     void init();
     void action();
 
@@ -11,6 +10,13 @@ public interface View {
         new Thread( this::action ).start();
     }
 
+    default void invokeAllViews( View[] views ){
 
+        for( View view : views ){
+            view.init();
+            view.action();
+        }
+
+    }
 
 }

@@ -95,6 +95,7 @@ class MainView extends  JFrame implements View{
 
         // create Action Listener and set it to button and task field key ENTER
         // action must be performed in new Thread , not in EventQueue
+        // it is made by View Interface
 
         button.addActionListener( e -> actionThread() );
         task.addActionListener  ( e -> actionThread() );
@@ -139,7 +140,7 @@ class MainView extends  JFrame implements View{
 
             appendTextArea( controller.getDTO().getSolution() );
 
-            invokeAllViews();
+            invokeAllViews( views );
 
         }
 
@@ -169,14 +170,7 @@ class MainView extends  JFrame implements View{
     }
 
 
-    private void invokeAllViews(){
 
-        for( View view : views ){
-            view.init();
-            view.action();
-        }
-
-    }
 
 
 }

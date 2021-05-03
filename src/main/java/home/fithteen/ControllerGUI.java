@@ -8,7 +8,6 @@ public class ControllerGUI implements Controller{
     private final DataTransferObject data = new DataTransferObject();
 
     ControllerGUI(ModelEquation modelEquation){
-
         this.modelEquation = modelEquation;
     }
 
@@ -23,6 +22,7 @@ public class ControllerGUI implements Controller{
         data.setInput( input );
 
     }
+
     @Override
      public DataTransferObject getDTO(){
          return data ;

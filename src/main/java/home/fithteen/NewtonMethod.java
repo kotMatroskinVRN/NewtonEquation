@@ -37,12 +37,6 @@ class NewtonMethod implements ModelEquation {
     private double solution ;
 
 
-    NewtonMethod( ){
-
-
-
-
-    }
 
     /**
      * @param input
@@ -172,12 +166,13 @@ class NewtonMethod implements ModelEquation {
         double x = nextX(x0);
 
 
-        while( count <10 && Math.abs(x - x0) > SIGMA  ){
+        while( count < 10 && Math.abs(x - x0) > SIGMA  ){
 
             x0=x;
 
 
-            // prevent division by zero in derivate
+            // prevent division by zero in derivative
+            // and switch x0 and x to overstep function break
             if ( derivative( x0) == 0  ){
                 x0 = count;
                 x = nextX(x0);
@@ -204,13 +199,12 @@ class NewtonMethod implements ModelEquation {
     }
 
 
-    //private double derivative(double x) throws ArithmeticException {
+
     private double derivative(double x)  {
 
         return ( fx(x+SIGMA) - fx(x) )/SIGMA;
     }
 
-    //private double fx(double x) throws ArithmeticException {
     private double fx(double x)  {
         double result;
 

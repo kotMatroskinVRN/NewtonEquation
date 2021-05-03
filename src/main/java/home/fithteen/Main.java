@@ -17,17 +17,19 @@ import javax.swing.*;
  */
 public class Main {
 
-   //private static MainView gui;
-   //private static NewtonMethod linearEquation;
 
     public static void main(String[] args) {
 
 
         NewtonMethod newtonMethod = new NewtonMethod();
         if(args.length>0){
-            System.out.println("false round");
-            newtonMethod.falseRound();
-            newtonMethod.setSIGMA( Double.parseDouble(args[0]));
+
+            double sigma = Double.parseDouble(args[0]);
+            if( sigma!=0 ) {
+                System.out.println("false round");
+                newtonMethod.falseRound();
+                newtonMethod.setSIGMA( sigma );
+            }
 
         }
 

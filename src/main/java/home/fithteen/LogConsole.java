@@ -2,7 +2,7 @@ package home.fithteen;
 
 public class LogConsole implements View {
     private String  solution;
-    private Controller controller ;
+    private final Controller controller ;
 
 
     LogConsole(Controller controller) {
