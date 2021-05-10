@@ -1,4 +1,4 @@
-package home.fithteen;
+package home.fithteen.controllers;
 
 public class DataTransferObject {
 

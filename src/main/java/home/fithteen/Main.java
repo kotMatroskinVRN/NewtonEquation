@@ -1,5 +1,13 @@
 package home.fithteen;
 
+import home.fithteen.controllers.Controller;
+import home.fithteen.controllers.MainController;
+import home.fithteen.models.BruteForceModel;
+import home.fithteen.models.ModelEquation;
+import home.fithteen.models.NewtonMethod;
+import home.fithteen.views.MainView;
+import home.fithteen.views.View;
+
 import javax.swing.*;
 
 /**
@@ -27,16 +35,19 @@ public class Main {
             double sigma = Double.parseDouble(args[0]);
             if( sigma!=0 ) {
                 System.out.println("false round");
-                newtonMethod.falseRound();
+                //newtonMethod.falseRound();
                 newtonMethod.setSIGMA( sigma );
             }
 
         }
 
+        ModelEquation bruteForceModel = new BruteForceModel();
 
-        ControllerGUI controllerGUI = new ControllerGUI(newtonMethod);
 
-        MainView mainView = new MainView(controllerGUI);
+        Controller controllerGUI = new MainController(newtonMethod);
+        //Controller controllerGUI = new MainController(bruteForceModel);
+
+        View mainView = new MainView(controllerGUI);
         SwingUtilities.invokeLater(  mainView::init );
 
 

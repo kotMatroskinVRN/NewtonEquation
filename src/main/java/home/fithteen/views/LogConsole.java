@@ -1,4 +1,7 @@
-package home.fithteen;
+package home.fithteen.views;
+
+
+import home.fithteen.controllers.Controller;
 
 public class LogConsole implements View {
     private String  solution;
