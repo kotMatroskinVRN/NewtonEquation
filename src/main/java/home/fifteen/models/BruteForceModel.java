@@ -3,13 +3,14 @@ package home.fifteen.models;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class BruteForceModel extends NewtonMethod {
 
 
     private double step ;
     private final Set<Double> approximateRoots = new HashSet<>();
-    private final Set<String> roots = new HashSet<>();
+    private final Set<Double> roots = new TreeSet<>();
     private Equation equation ;
 
     @Override
@@ -33,35 +34,11 @@ public class BruteForceModel extends NewtonMethod {
 
     }
 
-    @Override
-    public String getTextSolution() {
-        StringBuilder result = new StringBuilder();
 
-        result.append( "\n").append(equation.getInput()).append("\n");
-
-        if(roots.size()>0) {
-            int i =0;
-            for (String root : roots) {
-
-                result.append(String.format(
-                        "%s%s = %s\n",
-                        equation.getUnknown(),
-                        i++,
-                        root
-                ));
-
-            }
-        }
-        else {
-            result.append( "Решений нет!!!"  ).append("\n");
-        }
-
-        return result.toString();
-    }
 
     @Override
-    public double getSolution(){
-        return super.getSolution();
+    public Set<Double> getRoots(){
+        return roots;
     }
 
 
@@ -72,7 +49,12 @@ public class BruteForceModel extends NewtonMethod {
             super.solve();
             if(!super.ifCantSolve()) {
 
-                roots.add( DECIMAL_FORMAT.format(super.getSolution()) );
+                for(double root : super.getRoots()){
+                    root = Double.parseDouble( DECIMAL_FORMAT.format( root ) );
+                    roots.add( root );
+                }
+
+
             }
         }
     }
@@ -89,7 +71,8 @@ public class BruteForceModel extends NewtonMethod {
                     double fx = equation.fx(i);
                     double d  = equation.derivative(i);
                     if (fx == 0) {
-                        roots.add(DECIMAL_FORMAT.format(i));
+
+                        roots.add( Double.parseDouble( DECIMAL_FORMAT.format(i) ) );
                     } else {
                         if (fx * fx0 < 0) {
                             System.out.println(i + "\t" + fx);

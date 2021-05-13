@@ -1,7 +1,10 @@
 package home.fifteen.models;
 
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 
 import static java.lang.Math.*;
 
@@ -24,13 +27,11 @@ import static java.lang.Math.*;
 public class NewtonMethod implements ModelEquation {
 
     private boolean protectX0;
-
     private Equation equation;
-
     private int countException, countIteration;
     private double x0 , x ;
 
-    private double solution ;
+    private final Set<Double> roots = new TreeSet<>();
 
     private final Stack<Integer> initialX = new Stack<>();
 
@@ -51,7 +52,9 @@ public class NewtonMethod implements ModelEquation {
 
         countException = 0;
         countIteration = 0;
+
         x0 = 0;
+
         protectX0 = false;
         initialX.clear();
 
@@ -67,7 +70,7 @@ public class NewtonMethod implements ModelEquation {
     @Override
     public void solve(){
         if(equation.getUnknown().equals("")) countException = LIMIT;
-        else solution = newton() ;
+        else roots.add( newton() )  ;
     }
 
     @Override
@@ -75,43 +78,20 @@ public class NewtonMethod implements ModelEquation {
         return equation;
     }
 
-    /**
-     * @return result string according to accuracy or "Решений нет!!!"
-     */
+
     @Override
-    public String getTextSolution(){
-        StringBuilder result = new StringBuilder();
-        String format;
-
-        // if not solved
-        if( ifCantSolve() ) {
-            result.append( "\n").append(equation.getInput()).append("\n");
-            result.append( "Решений нет!!!"  ).append("\n");
-
-        }else{
-
-            int level = (int) abs(log10( SIGMA ) );
-            format ="\n%s\n%s = %." + level + "f \n";
-
-
-            result.append( String.format( format , equation.getInput() , equation.getUnknown() , solution ) );
-        }
-
-        return result.toString();
-    }
-
-    public double getSolution() {
-        return solution;
-    }
-
-    void setX0(double x0) {
-        this.x0 = x0;
-        protectX0 = true;
+    public Set<Double> getRoots() {
+        return roots;
     }
 
     @Override
     public boolean ifCantSolve() {
         return countIteration >=(int)(0.2/SIGMA) || countException >=LIMIT ;
+    }
+
+    void setX0(double x0) {
+        this.x0 = x0;
+        protectX0 = true;
     }
 
 

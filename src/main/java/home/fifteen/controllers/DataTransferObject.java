@@ -1,16 +1,20 @@
 package home.fifteen.controllers;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
 public class DataTransferObject {
 
     private String input;
     private String textSolution;
-    private double solution;
+    private Set<Double> roots = new TreeSet<>();
 
     public String getInput() {
         return input;
     }
 
-    public void setInput(String input) {
+    void setInput(String input) {
         this.input = input;
     }
 
@@ -18,15 +22,15 @@ public class DataTransferObject {
         return textSolution;
     }
 
-    public void setTextSolution(String textSolution) {
+    void setTextSolution(String textSolution) {
         this.textSolution = textSolution;
     }
 
-    public double getSolution() {
-        return solution;
+    public Set<Double> getRoots() {
+        return roots;
     }
 
-    public void setSolution(double solution) {
-        this.solution = solution;
+    public void setRoots(Set<Double> roots) {
+        this.roots = roots;
     }
 }

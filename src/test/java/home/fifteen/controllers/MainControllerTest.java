@@ -3,6 +3,11 @@ package home.fifteen.controllers;
 import home.fifteen.models.ModelEquation;
 import home.fifteen.models.NewtonMethod;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainControllerTest {
@@ -19,6 +24,11 @@ class MainControllerTest {
         assertTrue( checkResult("(270/x-2)*30 = 7*120" , 9 ) );
         assertTrue( checkResult("12 = 140-(x/7+29)*4" , 21 ) );
         assertTrue( checkResult("200 /x = 1" , 200 ) );
+        assertTrue( checkResult("(50-x)/7+195=40*5" , 15 ) );
+
+
+
+
 
 
         controller.action("x^2-7x+10 = 0");
@@ -38,11 +48,11 @@ class MainControllerTest {
     }
 
 
-    private boolean checkResult(String input , double solution){
+    private void checkResult(String input , Set<Double> roots){
 
         controller.action(input);
-
-        return Math.abs(solution - controller.getDTO().getSolution()) < model.SIGMA ;
+        Double[] calculatedArray = new Double[]{controller.getDTO().getRoots()};
+        assertArrayEquals(controller.getDTO().getRoots() , roots , model.SIGMA);
     }
 
 

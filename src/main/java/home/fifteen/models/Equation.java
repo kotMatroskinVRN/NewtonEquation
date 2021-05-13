@@ -14,15 +14,13 @@ public class Equation {
     private String input ;
 
 
-    public void init(String input ) {
+    void init(String input ) {
 
-        // saves original input string
         this.input = input;
 
         // set equation and replace : to /
         String equation = input.replaceAll(":", "\\/");
 
-        //System.out.println(this.equation);
         // split equation by '='
         final String[] sides = equation.split("=");
 
@@ -74,7 +72,7 @@ public class Equation {
     double fx(double x) throws ArithmeticException {
         double result;
         try{
-        double leftValue = left.setVariable(unknown,x).evaluate();
+        double leftValue  = left.setVariable(unknown,x).evaluate();
         double rightValue = right.setVariable(unknown,x).evaluate();
             result = leftValue - rightValue;
        }catch (ArithmeticException e){
@@ -85,7 +83,7 @@ public class Equation {
     }
 
 
-    private String findVariable(final String expr){
+    private String findVariable(String expr){
 
         for (char c : expr.toCharArray() ){
             if(c>96 && c<123 ) return String.valueOf(c);

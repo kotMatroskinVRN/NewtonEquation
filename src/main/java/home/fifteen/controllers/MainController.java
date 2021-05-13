@@ -28,8 +28,8 @@ public class MainController implements Controller{
         model.init(input);
         model.solve();
 
-        data.setSolution(model.getSolution());
-        data.setTextSolution( model.getTextSolution() );
+        data.setRoots(model.getRoots());
+        data.setTextSolution( model.getTextSolution( data.getRoots() ) );
         data.setInput( input );
 
     }
