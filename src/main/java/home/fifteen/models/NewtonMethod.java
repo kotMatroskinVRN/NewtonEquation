@@ -1,5 +1,7 @@
-package home.fithteen.models;
+package home.fifteen.models;
 
+
+import java.util.Stack;
 
 import static java.lang.Math.*;
 
@@ -21,14 +23,16 @@ import static java.lang.Math.*;
  */
 public class NewtonMethod implements ModelEquation {
 
-    private double SIGMA = 0.01   ;
+    private boolean protectX0;
 
     private Equation equation;
 
-    private int countEsception , countIteration;
+    private int countException, countIteration;
     private double x0 , x ;
 
     private double solution ;
+
+    private final Stack<Integer> initialX = new Stack<>();
 
 
     /**
@@ -45,18 +49,15 @@ public class NewtonMethod implements ModelEquation {
     @Override
     public void init(final String input){
 
-        countEsception = 0;
+        countException = 0;
         countIteration = 0;
         x0 = 0;
+        protectX0 = false;
+        initialX.clear();
 
-        //equation = new Equation(this);
         equation = new Equation();
         equation.init(input);
 
-        //System.out.println(equation.getLeft());
-        //System.out.println(equation.getRight());
-        System.out.println(equation.getUnknown());
-        System.out.println(equation.getInput());
 
     }
 
@@ -65,14 +66,14 @@ public class NewtonMethod implements ModelEquation {
      */
     @Override
     public void solve(){
-
-        if(equation.getUnknown().equals("")) countEsception =LIMIT;
+        if(equation.getUnknown().equals("")) countException = LIMIT;
         else solution = newton() ;
-        //System.out.println(solution);
     }
 
     @Override
-    public Equation getEquation(){ return equation; }
+    public Equation getEquation(){
+        return equation;
+    }
 
     /**
      * @return result string according to accuracy or "Решений нет!!!"
@@ -99,30 +100,18 @@ public class NewtonMethod implements ModelEquation {
         return result.toString();
     }
 
-
-
-    /**
-     * @param SIGMA set accuracy
-     */
-    public void setSIGMA(double SIGMA) {
-        this.SIGMA = SIGMA;
+    public double getSolution() {
+        return solution;
     }
 
-    /**
-     * set round to false
-     * make result integer number
-     */
-//    public void falseRound() {
-//        this.round = false;
-//    }
-
-    double getSolution() { return solution; }
-
-    void setX0(double x0) { this.x0 = x0; }
+    void setX0(double x0) {
+        this.x0 = x0;
+        protectX0 = true;
+    }
 
     @Override
     public boolean ifCantSolve() {
-        return countIteration >=(int)(0.2/SIGMA) || countEsception >=LIMIT ;
+        return countIteration >=(int)(0.2/SIGMA) || countException >=LIMIT ;
     }
 
 
@@ -130,52 +119,53 @@ public class NewtonMethod implements ModelEquation {
 
         try {
         x = nextX(x0);
-        System.out.println(x);
-
 
             while ( !ifCantSolve() && Math.abs(x - x0) > SIGMA) {
                 x0 = x;
                 x -= nextX(x0);
-                System.out.printf("x  = %s\n", x);
             }
         }
         catch (ArithmeticException e){
             handleException();
         }
 
-        System.out.printf(" Normal \nX = %.3f X0 = %.3f COUNT = %d\n" , x , x0 , countEsception);
         return x;
     }
 
     private double nextX (double xi) throws ArithmeticException{
         try{
-
-            //if( Math.abs(xi)==Double.POSITIVE_INFINITY) throw new ArithmeticException();
-            //if( Math.abs(xi)> LIMIT || Math.abs(xi)<1/LIMIT) {
-            //    throw new ArithmeticException();
-            //}
-
             double derivative = equation.derivative(xi);
             if (derivative == 0) throw new ArithmeticException();
-
-            System.out.println(countEsception);
-            System.out.printf( "x0 = %s\n" , x0);
-            System.out.printf( "x' = %s\n" , derivative);
-
             countIteration++;
+
             return equation.fx(xi)/derivative;
-        }catch(ArithmeticException e){
+        }
+        catch(ArithmeticException e){
             throw new ArithmeticException();
         }
     }
 
-    private double handleException(){
+    private void handleException(){
         System.out.println("Exception\t" + x0);
-        //countEsception++;
         countIteration = 0;
-        x0 = ++countEsception;
 
-        return newton();
+        System.out.println(initialX);
+        int step = 1000;
+        countException++;
+
+        if(protectX0) {
+            countException = LIMIT;
+        }
+        else{
+            if (initialX.empty()) {
+                initialX.push(countException + step);
+                initialX.push(countException - step);
+            } else {
+                x0 = initialX.pop();
+            }
+        }
+
+        newton();
     }
 
 

@@ -1,7 +1,7 @@
-package home.fithteen.views;
+package home.fifteen.views;
 
 
-import home.fithteen.controllers.Controller;
+import home.fifteen.controllers.Controller;
 
 public class LogConsole implements View {
     private String  solution;
@@ -22,7 +22,8 @@ public class LogConsole implements View {
         return "Log console : \n" + solution;
     }
 
+    @Override
     public void init(){
-        this.solution = controller.getDTO().getSolution();
+        this.solution = controller.getDTO().getTextSolution();
     }
 }

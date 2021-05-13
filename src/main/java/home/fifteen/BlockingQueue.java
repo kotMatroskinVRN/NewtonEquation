@@ -1,4 +1,4 @@
-package home.fithteen;
+package home.fifteen;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,8 @@ public class BlockingQueue {
         while (tasks.isEmpty()) {
             try {
                 wait();
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

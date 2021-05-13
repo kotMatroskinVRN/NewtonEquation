@@ -1,8 +1,8 @@
-package home.fithteen.controllers;
+package home.fifteen.controllers;
 
 
-import home.fithteen.models.BruteForceModel;
-import home.fithteen.models.ModelEquation;
+import home.fifteen.models.BruteForceModel;
+import home.fifteen.models.ModelEquation;
 
 import java.util.regex.Pattern;
 
@@ -26,19 +26,17 @@ public class MainController implements Controller{
 
         getProperModel(input);
         model.init(input);
-
         model.solve();
 
-        data.setSolution( model.getTextSolution() );
+        data.setSolution(model.getSolution());
+        data.setTextSolution( model.getTextSolution() );
         data.setInput( input );
 
     }
 
-
-
     @Override
      public DataTransferObject getDTO(){
-         return data ;
+        return data ;
      }
 
     private void getProperModel(String input) {

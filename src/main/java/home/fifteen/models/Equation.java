@@ -1,4 +1,4 @@
-package home.fithteen.models;
+package home.fifteen.models;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -6,18 +6,13 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class Equation {
 
-    private final double SIGMA = 0.01   ;
-    //private final ModelEquation MODEL;
+    private final double SIGMA = ModelEquation.SIGMA;
 
     private Expression left;
     private Expression right;
     private String unknown;
     private String input ;
 
-
-
-
-    //public Equation(ModelEquation MODEL) {this.MODEL = MODEL;}
 
     public void init(String input ) {
 
@@ -59,13 +54,13 @@ public class Equation {
 
     }
 
-    String getInput() { return input; }
+    public String getUnknown() {
+        return unknown;
+    }
 
-    public String getUnknown() {return unknown;}
-
-    Expression getLeft() { return left; }
-
-    Expression getRight() { return right; }
+    String getInput() {
+        return input;
+    }
 
     double derivative(double x) throws ArithmeticException  {
         try {
@@ -78,7 +73,6 @@ public class Equation {
 
     double fx(double x) throws ArithmeticException {
         double result;
-        //System.out.println("fx");
         try{
         double leftValue = left.setVariable(unknown,x).evaluate();
         double rightValue = right.setVariable(unknown,x).evaluate();

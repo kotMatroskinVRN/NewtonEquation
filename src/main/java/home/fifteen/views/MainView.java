@@ -1,12 +1,9 @@
-package home.fithteen.views;
+package home.fifteen.views;
 
-import home.fithteen.controllers.Controller;
+import home.fifteen.controllers.Controller;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.regex.Pattern;
 
 /**
  * @author Manankov Andrey
@@ -28,9 +25,6 @@ public class MainView extends  JFrame implements View{
     private final JTextField    task = new JTextField("");
     private final JTextArea textArea = new JTextArea(   HEADER + " :\n\n"  );
     private final JButton button = new JButton("Решить");
-
-    private final KeyListener oneVariable = new OneVariable();
-
 
 
     /**
@@ -147,25 +141,18 @@ public class MainView extends  JFrame implements View{
 
         // append text area
         if( !task.getText().isEmpty() ) {
-
             controller.action( input );
-
-            appendTextArea( controller.getDTO().getSolution() );
-
+            appendTextArea( controller.getDTO().getTextSolution() );
             invokeAllViews( views );
-
         }
 
-            showFields(true);
-
-
+        showFields(true);
 
     }
 
     private void appendTextArea( String text){
         String newText = textArea.getText() + text ;
         SwingUtilities.invokeLater( () -> textArea.setText(newText) );
-
     }
 
     private void showFields(boolean enable){
@@ -178,92 +165,8 @@ public class MainView extends  JFrame implements View{
                 task.setText("");
                 task.requestFocusInWindow();
             }
+
         });
     }
-
-
-    class OneVariable implements KeyListener {
-
-        char variable;
-
-        OneVariable(){};
-
-
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-
-            char c = e.getKeyChar();
-//            String prevText = "";
-
-            //System.out.println("test " + c);
-
-
-
-            if( e.getSource().getClass().isInstance(new JTextField()) ){
-
-                JTextField textField = (JTextField)e.getSource();
-                String text = textField.getText();
-
-//                if(hasNewLetter(text)){
-//                    text = prevText;
-//                    textField.setText(text);
-//                }else {
-//                    prevText = text;
-//                }
-
-                System.out.println("test " + c);
-                System.out.println("test " + variable);
-
-
-                if(!Pattern.compile("\\S").matcher(text).find() ){
-
-                    variable = c;
-
-
-
-                }else{
-                    if( text.isEmpty() ){
-                        clearVariable();
-                    }
-
-                    if(c!=variable) e.consume();
-                }
-
-            }
-
-
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-
-
-
-        }
-
-        private void clearVariable(){ variable = 0; }
-
-        private boolean hasNewLetter(String string){
-
-            char[] chars = new char[0];
-            string.getChars(0,string.length() , chars , 0);
-
-            for (int i=0;i<chars.length;i++){
-                for (int j=0;j<chars.length;j++){
-                    if(i!=j && chars[i]==chars[j]) return true;
-                }
-            }
-
-            return false;
-        }
-
-    }
-
 
 }

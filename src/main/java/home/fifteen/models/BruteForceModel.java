@@ -1,4 +1,4 @@
-package home.fithteen.models;
+package home.fifteen.models;
 
 
 import java.util.HashSet;
@@ -8,9 +8,9 @@ public class BruteForceModel extends NewtonMethod {
 
 
     private double step ;
-    private Set<Double> approximateRoots;
-    private Set<String> roots;
-    private Equation equation;
+    private final Set<Double> approximateRoots = new HashSet<>();
+    private final Set<String> roots = new HashSet<>();
+    private Equation equation ;
 
     @Override
     public void init(final String input){
@@ -19,8 +19,8 @@ public class BruteForceModel extends NewtonMethod {
         equation = super.getEquation();
 
         step = 100;
-        approximateRoots = new HashSet<>();
-        roots = new HashSet<>();
+        approximateRoots.clear();
+        roots.clear();
 
     }
 
@@ -30,8 +30,6 @@ public class BruteForceModel extends NewtonMethod {
         // fill root array with approximate solutions
         getApproximateRoots(-LIMIT,LIMIT,step);
         getExactRoots();
-
-
 
     }
 
@@ -61,6 +59,10 @@ public class BruteForceModel extends NewtonMethod {
         return result.toString();
     }
 
+    @Override
+    public double getSolution(){
+        return super.getSolution();
+    }
 
 
     private void getExactRoots(){
@@ -77,8 +79,6 @@ public class BruteForceModel extends NewtonMethod {
 
     private void getApproximateRoots(double low , double high , double step){
 
-        //String x = super.getEquation().getUnknown();
-
         double fx0 = 0;
         double d0  = 0;
 
@@ -86,7 +86,6 @@ public class BruteForceModel extends NewtonMethod {
             for (double i = low + 1; i <= high; i += step) {
 
                 try {
-                    //double fx = equation.getLeft().setVariable(x, i).evaluate() - equation.getRight().setVariable(x,i).evaluate();
                     double fx = equation.fx(i);
                     double d  = equation.derivative(i);
                     if (fx == 0) {
@@ -98,7 +97,9 @@ public class BruteForceModel extends NewtonMethod {
                         }
 
                         // when extreme is in segment
-                        if(d*d0 < 0){ getApproximateRoots(i-step , i , step/100); }
+                        if(d*d0 < 0){
+                            getApproximateRoots(i-step , i , step/100);
+                        }
                     }
 
                     fx0 = fx;
@@ -114,20 +115,6 @@ public class BruteForceModel extends NewtonMethod {
 
     }
 
-    public static void main(String[] args) {
 
-
-        ModelEquation bruteForce = new BruteForceModel();
-        //bruteForce.init("6/(x+2)+10=12");
-        bruteForce.init("x^2=6.25");
-        bruteForce.solve();
-
-        System.out.println(
-                bruteForce.getTextSolution()
-        );
-
-
-
-    }
 
 }
