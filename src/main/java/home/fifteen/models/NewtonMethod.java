@@ -1,12 +1,9 @@
 package home.fifteen.models;
 
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
-
-import static java.lang.Math.*;
 
 /**
  * @author Andrey Manankov
@@ -57,6 +54,7 @@ public class NewtonMethod implements ModelEquation {
 
         protectX0 = false;
         initialX.clear();
+        roots.clear();
 
         equation = new Equation();
         equation.init(input);
@@ -70,7 +68,10 @@ public class NewtonMethod implements ModelEquation {
     @Override
     public void solve(){
         if(equation.getUnknown().equals("")) countException = LIMIT;
-        else roots.add( newton() )  ;
+        else {
+            double root = Double.parseDouble( DECIMAL_FORMAT.format( newton() ) );
+            if( Math.abs(root)<LIMIT ) roots.add(root)  ;
+        }
     }
 
     @Override
@@ -115,8 +116,9 @@ public class NewtonMethod implements ModelEquation {
     private double nextX (double xi) throws ArithmeticException{
         try{
             double derivative = equation.derivative(xi);
-            if (derivative == 0) throw new ArithmeticException();
-            countIteration++;
+            if (derivative != 0) {
+                countIteration++;
+            }
 
             return equation.fx(xi)/derivative;
         }
@@ -126,10 +128,8 @@ public class NewtonMethod implements ModelEquation {
     }
 
     private void handleException(){
-        System.out.println("Exception\t" + x0);
         countIteration = 0;
 
-        System.out.println(initialX);
         int step = 1000;
         countException++;
 
@@ -147,7 +147,6 @@ public class NewtonMethod implements ModelEquation {
 
         newton();
     }
-
 
 
 }

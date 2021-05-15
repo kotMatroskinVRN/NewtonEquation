@@ -15,15 +15,17 @@ public class DataTransferObject {
     }
 
     void setInput(String input) {
+
         this.input = input;
     }
 
     public String getTextSolution() {
+
         return textSolution;
     }
 
-    void setTextSolution(String textSolution) {
-        this.textSolution = textSolution;
+    void setTextSolution(String textSolution){
+            this.textSolution = textSolution;
     }
 
     public Set<Double> getRoots() {
