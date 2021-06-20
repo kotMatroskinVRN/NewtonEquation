@@ -99,11 +99,13 @@ public class NewtonMethod implements ModelEquation {
     private double newton(){
 
         try {
-        x = nextX(x0);
-
+            x = nextX(x0);
             while ( !ifCantSolve() && Math.abs(x - x0) > SIGMA) {
                 x0 = x;
                 x -= nextX(x0);
+
+                if(x>LIMIT) throw new ArithmeticException();
+
             }
         }
         catch (ArithmeticException e){
@@ -140,9 +142,10 @@ public class NewtonMethod implements ModelEquation {
             if (initialX.empty()) {
                 initialX.push(countException + step);
                 initialX.push(countException - step);
-            } else {
-                x0 = initialX.pop();
             }
+
+            x0 = initialX.pop();
+
         }
 
         newton();
