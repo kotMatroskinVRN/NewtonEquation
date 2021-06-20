@@ -69,7 +69,7 @@ public class NewtonMethod implements ModelEquation {
     public void solve(){
         if(equation.getUnknown().equals("")) countException = LIMIT;
         else {
-            double root = Double.parseDouble( DECIMAL_FORMAT.format( newton() ) );
+            double root = Double.parseDouble( DECIMAL_FORMAT.format( newton() ).replace(",",".") );
             if( Math.abs(root)<LIMIT ) roots.add(root)  ;
         }
     }
