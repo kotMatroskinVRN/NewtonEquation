@@ -50,7 +50,7 @@ public class BruteForceModel extends NewtonMethod {
             if(!super.ifCantSolve()) {
 
                 for(double root : super.getRoots()){
-                    root = Double.parseDouble( DECIMAL_FORMAT.format( root ) );
+                    root = decimalCorrection( root ) ;
                     roots.add( root );
                 }
 
@@ -72,7 +72,7 @@ public class BruteForceModel extends NewtonMethod {
                     double d  = equation.derivative(i);
                     if (fx == 0) {
 
-                        roots.add( Double.parseDouble( DECIMAL_FORMAT.format(i) ) );
+                        roots.add( decimalCorrection(i) );
                     } else {
                         if (fx * fx0 < 0) {
                             System.out.println(i + "\t" + fx);

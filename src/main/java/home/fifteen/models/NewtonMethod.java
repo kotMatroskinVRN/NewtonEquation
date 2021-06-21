@@ -9,16 +9,6 @@ import java.util.TreeSet;
  * @author Andrey Manankov
  * @version 1.0.0
  *
- * Class for Equation
- *
- * e.g.
- * x+5 = 10
- *
- * '=' must be in equation
- * must be only one variable - any letter. Only in left part. Variable in right part is not acceptable
- * ()*\/:+- are possible operations
- * format 5*x and 5x if accepted
- * format x5 gives incorrect answer
  *
  */
 public class NewtonMethod implements ModelEquation {
@@ -69,7 +59,7 @@ public class NewtonMethod implements ModelEquation {
     public void solve(){
         if(equation.getUnknown().equals("")) countException = LIMIT;
         else {
-            double root = Double.parseDouble( DECIMAL_FORMAT.format( newton() ).replace(",",".") );
+            double root = decimalCorrection( newton() ) ;
             if( Math.abs(root)<LIMIT ) roots.add(root)  ;
         }
     }

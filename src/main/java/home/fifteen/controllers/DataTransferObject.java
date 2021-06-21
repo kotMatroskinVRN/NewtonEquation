@@ -25,11 +25,11 @@ public class DataTransferObject {
         this.textSolution = textSolution;
     }
 
-    public Set<Double> getRoots() {
+    Set<Double> getRoots() {
         return roots;
     }
 
-    public void setRoots(Set<Double> roots) {
+    void setRoots(Set<Double> roots) {
         this.roots = roots;
     }
 }

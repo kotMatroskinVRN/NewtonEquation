@@ -43,6 +43,10 @@ public interface ModelEquation {
         return result.toString();
     }
 
+    default double decimalCorrection(double input){
+
+        return Double.parseDouble( DECIMAL_FORMAT.format( input ).replace("," , ".") );
+    }
 
 
 }

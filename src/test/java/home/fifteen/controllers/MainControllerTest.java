@@ -16,7 +16,7 @@ class MainControllerTest {
     @Test
     void action() {
 
-        checkResult("6/(x+2)+10=12" , new double[]{1}  );
+        checkResult("6/(x+2)+10=12" , new double[]{1.0}  );
         checkResult("140-(x/7+29)*4=12" , new double[]{21}  );
         checkResult("720 / (5x - 12) - 56 = 34" , new double[]{4}  );
         checkResult("(270/x-2)*30 = 7*120" , new double[]{9}  );
