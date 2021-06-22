@@ -8,8 +8,9 @@ public class LogConsole implements View {
     private final Controller controller ;
 
 
-    LogConsole(Controller controller) {
+    public LogConsole(Controller controller) {
         this.controller = controller;
+        controller.addView(this);
     }
 
     @Override

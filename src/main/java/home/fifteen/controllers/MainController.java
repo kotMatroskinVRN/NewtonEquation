@@ -3,7 +3,9 @@ package home.fifteen.controllers;
 
 import home.fifteen.models.BruteForceModel;
 import home.fifteen.models.ModelEquation;
+import home.fifteen.views.View;
 
+import java.util.HashSet;
 import java.util.regex.Pattern;
 
 public class MainController implements Controller{
@@ -12,6 +14,7 @@ public class MainController implements Controller{
     private final ModelEquation bruteForceModel;
 
     private final DataTransferObject data = new DataTransferObject();
+    private final HashSet<View> viewSet = new HashSet<>();
 
     private ModelEquation model ;
 
@@ -32,6 +35,8 @@ public class MainController implements Controller{
         data.setRoots(model.getRoots());
         data.setTextSolution( model.getTextSolution( data.getRoots() ) );
 
+        invokeAllViews();
+
 
     }
 
@@ -39,6 +44,19 @@ public class MainController implements Controller{
      public DataTransferObject getDTO(){
         return data ;
      }
+
+    @Override
+    public void addView(View view) {
+        viewSet.add(view);
+    }
+
+    @Override
+    public void invokeAllViews() {
+        for(View view : viewSet){
+            view.init();
+            view.actionThread();
+        }
+    }
 
     private void getProperModel(String input) {
         defaultModel.init(input);

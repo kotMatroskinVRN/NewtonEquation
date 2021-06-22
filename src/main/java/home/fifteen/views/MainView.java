@@ -19,7 +19,7 @@ import java.awt.*;
 public class MainView extends  JFrame implements View{
 
     private final Controller controller ;
-    private final View[] views ;
+    //private final View[] views ;
 
     private final String HEADER  = "Решение Уравнений";
     private final JTextField    task = new JTextField("");
@@ -37,10 +37,10 @@ public class MainView extends  JFrame implements View{
 
         this.controller = controller;
 
-        views = new View[]{
-                new LogConsole(controller)
-
-        };
+//        views = new View[]{
+//                new LogConsole(controller)
+//
+//        };
 
     }
 
@@ -143,7 +143,7 @@ public class MainView extends  JFrame implements View{
         if( !task.getText().isEmpty() ) {
             controller.action( input );
             appendTextArea( controller.getDTO().getTextSolution() );
-            invokeAllViews( views );
+//            invokeAllViews( views );
         }
 
         showFields(true);

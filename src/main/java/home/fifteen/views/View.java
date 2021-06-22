@@ -5,6 +5,7 @@ public interface View {
 
     void init();
     void action();
+    //void invoke();
 
     default void actionThread(){
         new Thread( this::action ).start();

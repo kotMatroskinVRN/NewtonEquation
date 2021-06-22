@@ -4,6 +4,7 @@ import home.fifteen.controllers.Controller;
 import home.fifteen.controllers.MainController;
 import home.fifteen.models.ModelEquation;
 import home.fifteen.models.NewtonMethod;
+import home.fifteen.views.LogConsole;
 import home.fifteen.views.MainView;
 import home.fifteen.views.View;
 
@@ -26,7 +27,8 @@ public class Main {
 
         ModelEquation newtonMethod = new NewtonMethod();
         Controller controllerGUI = new MainController(newtonMethod);
-        View mainView = new MainView(controllerGUI);
+        View mainView   = new MainView(controllerGUI);
+        View logConsole = new LogConsole(controllerGUI);
 
         SwingUtilities.invokeLater(  mainView::init );
 
