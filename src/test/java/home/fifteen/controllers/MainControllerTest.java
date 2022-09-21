@@ -3,6 +3,7 @@ package home.fifteen.controllers;
 import home.fifteen.models.ModelEquation;
 import home.fifteen.models.NewtonMethod;
 import org.apache.maven.surefire.shared.lang3.ArrayUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
@@ -10,8 +11,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MainControllerTest {
 
-    private final ModelEquation   model = new NewtonMethod();
-    private final Controller controller = new MainController(model);
+    private ModelEquation   model;
+    private Controller controller;
+
+    @BeforeEach
+    void init(){
+        model = new NewtonMethod();
+        controller = new MainController(model);
+    }
 
     @Test
     void action() {
@@ -26,6 +33,7 @@ class MainControllerTest {
 
 
         checkResult("x^2-7x+10 = 0" , new double[]{2,5}  );
+        checkResult("x^2 = 0" , new double[]{0}  );
 
         String result;
 

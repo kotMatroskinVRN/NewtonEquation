@@ -35,7 +35,7 @@ public class NewtonMethod implements ModelEquation {
      *
      */
     @Override
-    public void init(final String input){
+    public void init(String input){
 
         countException = 0;
         countIteration = 0;
@@ -57,10 +57,12 @@ public class NewtonMethod implements ModelEquation {
      */
     @Override
     public void solve(){
-        if(equation.getUnknown().equals("")) countException = LIMIT;
-        else {
-            double root = decimalCorrection( newton() ) ;
+        if(equation.isEquation()){
+            double root = decimalCorrection( countNewton() ) ;
             if( Math.abs(root)<LIMIT ) roots.add(root)  ;
+        }
+        else {
+            countException = LIMIT;
         }
     }
 
@@ -76,8 +78,8 @@ public class NewtonMethod implements ModelEquation {
     }
 
     @Override
-    public boolean ifCantSolve() {
-        return countIteration >=(int)(0.2/SIGMA) || countException >=LIMIT ;
+    public boolean hasRoots() {
+        return countIteration < (int)(0.2/SIGMA) && countException < LIMIT ;
     }
 
     void setX0(double x0) {
@@ -86,13 +88,13 @@ public class NewtonMethod implements ModelEquation {
     }
 
 
-    private double newton(){
+    private double countNewton(){
 
         try {
-            x = nextX(x0);
-            while ( !ifCantSolve() && Math.abs(x - x0) > SIGMA) {
+            x = countNextX(x0);
+            while ( hasRoots() && Math.abs(x - x0) > SIGMA) {
                 x0 = x;
-                x -= nextX(x0);
+                x -= countNextX(x0);
 
                 if(x>LIMIT) throw new ArithmeticException();
 
@@ -105,7 +107,7 @@ public class NewtonMethod implements ModelEquation {
         return x;
     }
 
-    private double nextX (double xi) throws ArithmeticException{
+    private double countNextX(double xi) throws ArithmeticException{
         try{
             double derivative = equation.derivative(xi);
             if (derivative != 0) {
@@ -138,7 +140,7 @@ public class NewtonMethod implements ModelEquation {
 
         }
 
-        newton();
+        countNewton();
     }
 
 

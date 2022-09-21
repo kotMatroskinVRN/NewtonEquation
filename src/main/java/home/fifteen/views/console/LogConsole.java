@@ -1,7 +1,8 @@
-package home.fifteen.views;
+package home.fifteen.views.console;
 
 
 import home.fifteen.controllers.Controller;
+import home.fifteen.views.View;
 
 public class LogConsole implements View {
     private String  solution;

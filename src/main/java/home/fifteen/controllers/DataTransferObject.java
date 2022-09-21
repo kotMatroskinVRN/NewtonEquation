@@ -9,11 +9,11 @@ public class DataTransferObject {
     private String textSolution;
     private Set<Double> roots = new TreeSet<>();
 
-    public String getInput() {
-        return input;
-    }
+//    public String getInput() {
+//        return input;
+//    }
 
-    void setInput(String input) {
+    public void setInput(String input) {
         this.input = input;
     }
 
@@ -21,15 +21,15 @@ public class DataTransferObject {
         return textSolution;
     }
 
-    void setTextSolution(String textSolution){
+    public void setTextSolution(String textSolution){
         this.textSolution = textSolution;
     }
 
-    Set<Double> getRoots() {
+    public Set<Double> getRoots() {
         return roots;
     }
 
-    void setRoots(Set<Double> roots) {
+    public void setRoots(Set<Double> roots) {
         this.roots = roots;
     }
 }

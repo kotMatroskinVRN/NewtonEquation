@@ -4,8 +4,8 @@ import home.fifteen.controllers.Controller;
 import home.fifteen.controllers.MainController;
 import home.fifteen.models.ModelEquation;
 import home.fifteen.models.NewtonMethod;
-import home.fifteen.views.LogConsole;
-import home.fifteen.views.MainView;
+import home.fifteen.views.console.LogConsole;
+import home.fifteen.views.guiswing.MainView;
 import home.fifteen.views.View;
 
 import javax.swing.*;

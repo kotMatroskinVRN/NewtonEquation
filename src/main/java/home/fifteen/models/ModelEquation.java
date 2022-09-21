@@ -15,7 +15,7 @@ public interface ModelEquation {
     void init(final String input);
     void solve();
     Set<Double> getRoots();
-    boolean ifCantSolve();
+    boolean hasRoots();
     Equation getEquation();
 
     default String getTextSolution( final Set<Double> roots ) {

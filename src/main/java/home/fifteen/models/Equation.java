@@ -12,22 +12,18 @@ public class Equation {
     private Expression right;
     private String unknown;
     private String input ;
+    private boolean isEquation;
 
 
     void init(String input ) {
 
         this.input = input;
-
-        // set equation and replace : to /
         String equation = input.replaceAll(":", "\\/");
+        String[] sides = equation.split("=");
+        isEquation = true;
+        unknown = findVariable(equation);
 
-        // split equation by '='
-        final String[] sides = equation.split("=");
-
-        // checks if equation has both sides
-        // set correspondent variables : sides and unknown
-        if(sides.length>1){
-            unknown = findVariable(sides[0]);
+        if(sides.length>1 && !unknown.equals("")){
 
             left  = new ExpressionBuilder(sides[0])
                     .variable(unknown)
@@ -37,19 +33,14 @@ public class Equation {
                     .build();
         }
         else {
-            // fill dummy if '=' was not found
-            System.out.println("Can't find \"=\"");
-            unknown = "";
-
-            left  = new ExpressionBuilder("1/x")
-                    .variable("x")
-                    .build();
-            right = new ExpressionBuilder("0")
-                    .build();
-
+            makeDummyEquation();
+            isEquation = false;
         }
 
+    }
 
+    public boolean isEquation() {
+        return isEquation;
     }
 
     public String getUnknown() {
@@ -72,8 +63,8 @@ public class Equation {
     double fx(double x) throws ArithmeticException {
         double result;
         try{
-        double leftValue  = left.setVariable(unknown,x).evaluate();
-        double rightValue = right.setVariable(unknown,x).evaluate();
+            double leftValue  =  left.setVariable(unknown,x).evaluate();
+            double rightValue = right.setVariable(unknown,x).evaluate();
             result = leftValue - rightValue;
        }catch (ArithmeticException e){
             throw new ArithmeticException();
@@ -86,9 +77,24 @@ public class Equation {
     private String findVariable(String expr){
 
         for (char c : expr.toCharArray() ){
-            if(c>96 && c<123 ) return String.valueOf(c);
+            if(c>96 && c<123 ) {
+                return String.valueOf(c);
+            }
         }
-        return "x";
+        return "";
+    }
+
+    private void makeDummyEquation(){
+
+        System.out.println("Can't find \"=\" or variable");
+        unknown = "";
+
+        left  = new ExpressionBuilder("1/x")
+                .variable("x")
+                .build();
+        right = new ExpressionBuilder("0")
+                .build();
+
     }
 
 

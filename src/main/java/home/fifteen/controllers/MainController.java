@@ -1,33 +1,31 @@
 package home.fifteen.controllers;
 
 
-import home.fifteen.models.BruteForceModel;
 import home.fifteen.models.ModelEquation;
+import home.fifteen.models.ModelSelector;
 import home.fifteen.views.View;
 
 import java.util.HashSet;
-import java.util.regex.Pattern;
+import java.util.Set;
 
 public class MainController implements Controller{
 
-    private final ModelEquation defaultModel;
-    private final ModelEquation bruteForceModel;
-
-    private final DataTransferObject data = new DataTransferObject();
-    private final HashSet<View> viewSet = new HashSet<>();
+    private final DataTransferObject data;
+    private final Set<View> outputViews;
 
     private ModelEquation model ;
 
     public MainController(ModelEquation modelEquation){
-        defaultModel = modelEquation;
-        bruteForceModel = new BruteForceModel();
+        model = modelEquation;
+        data = new DataTransferObject();
+        outputViews = new HashSet<>();
     }
 
 
     @Override
-    public void action(final String input ){
+    public void action(String input ){
 
-        getProperModel(input);
+        setProperModel(input);
         model.init(input);
         model.solve();
 
@@ -47,39 +45,22 @@ public class MainController implements Controller{
 
     @Override
     public void addView(View view) {
-        viewSet.add(view);
+        outputViews.add(view);
     }
 
     @Override
     public void invokeAllViews() {
-        for(View view : viewSet){
+        for(View view : outputViews){
             view.init();
             view.actionThread();
         }
     }
 
-    private void getProperModel(String input) {
-        defaultModel.init(input);
-        String unknown = defaultModel.getEquation().getUnknown();
+    private void setProperModel(String input) {
+        model.init(input);
+        ModelSelector selector = new ModelSelector(model);
+        model = selector.select().getModel();
 
-        String[] patterns = new String[]{
-                unknown + "\\s*[\\^]\\s*" ,
-                unknown + "\\s*[*]\\s*" + unknown,
-                //"=.*" + unknown,
-        };
-
-        Pattern pattern = Pattern.compile( String.join( "|" , patterns  ) );
-
-
-        // factory
-        if( pattern.matcher(input).find() ) {
-            model = bruteForceModel;
-            System.out.println("brute");
-        }
-        else {
-            model = defaultModel;
-            System.out.println("Newton");
-        }
     }
 
 }

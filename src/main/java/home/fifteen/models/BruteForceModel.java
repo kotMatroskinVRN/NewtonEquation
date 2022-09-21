@@ -14,7 +14,7 @@ public class BruteForceModel extends NewtonMethod {
     private Equation equation ;
 
     @Override
-    public void init(final String input){
+    public void init(String input){
 
         super.init(input);
         equation = super.getEquation();
@@ -28,9 +28,8 @@ public class BruteForceModel extends NewtonMethod {
     @Override
     public void solve() {
 
-        // fill root array with approximate solutions
-        getApproximateRoots(-LIMIT,LIMIT,step);
-        getExactRoots();
+        findApproximateRoots(-LIMIT,LIMIT,step);
+        findExactRoots();
 
     }
 
@@ -42,36 +41,35 @@ public class BruteForceModel extends NewtonMethod {
     }
 
 
-    private void getExactRoots(){
+    private void findExactRoots(){
 
         for(double i : approximateRoots){
             super.setX0(i);
             super.solve();
-            if(!super.ifCantSolve()) {
+            if(super.hasRoots()) {
 
                 for(double root : super.getRoots()){
                     root = decimalCorrection( root ) ;
                     roots.add( root );
                 }
 
-
             }
         }
     }
 
-    private void getApproximateRoots(double low , double high , double step){
+    private void findApproximateRoots(double low , double high , double step){
 
         double fx0 = 0;
         double d0  = 0;
 
-        if(!super.ifCantSolve()) {
+        if(super.hasRoots()) {
             for (double i = low + 1; i <= high; i += step) {
 
                 try {
                     double fx = equation.fx(i);
                     double d  = equation.derivative(i);
-                    if (fx == 0) {
 
+                    if (fx == 0) {
                         roots.add( decimalCorrection(i) );
                     } else {
                         if (fx * fx0 < 0) {
@@ -81,18 +79,15 @@ public class BruteForceModel extends NewtonMethod {
 
                         // when extreme is in segment
                         if(d*d0 < 0){
-                            getApproximateRoots(i-step , i , step/100);
+                            findApproximateRoots(i-step , i , step/100);
                         }
                     }
-
                     fx0 = fx;
                     d0  = d;
                 } catch (ArithmeticException e) {
                     fx0 = 0;
                     d0 = 0;
                 }
-
-
             }
         }
 
