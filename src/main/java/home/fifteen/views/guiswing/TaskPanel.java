@@ -34,8 +34,8 @@ class TaskPanel extends JPanel {
         add(task , BorderLayout.CENTER);
         add(button , BorderLayout.EAST);
 
-        button.addActionListener( e -> view.actionThread() );
-        task.addActionListener  ( e -> view.actionThread() );
+        button.addActionListener( e -> view.action() );
+        task.addActionListener  ( e -> view.action() );
         task.addKeyListener( new HistoryListener() );
     }
 
@@ -50,7 +50,7 @@ class TaskPanel extends JPanel {
         this.enable = enable;
     }
 
-    void update(){
+    void clear(){
         button.setEnabled(enable);
         task.setEnabled(enable);
 

@@ -10,10 +10,8 @@ import javax.swing.*;
 /**
  * @author Manankov Andrey
  * @version 1.0.0
- *
- * GUI for solving equation program
- *
- * Task field
+  * GUI for solving equation program
+  * Task field
  * Solve button
  * Result area
  * Margins
@@ -29,7 +27,6 @@ public class MainView extends  JFrame implements View {
 
     /**
      * Main constructor
-     *
      * setup GUI
      */
     public MainView(Controller controller) {
@@ -61,34 +58,41 @@ public class MainView extends  JFrame implements View {
 
     /**
      * Main action
-     *
      * gets text from task field
      * creates equation instance
      * appends text area
      * clears task field
-     *
      * contains some examples : 1 2 3 4 0
      * type just number and press ENTER
      */
     @Override
     public void action() {
-
-        taskPanel.setEnable(false);
-        taskPanel.update();
-
-        // get text from task field
-        String input = taskPanel.getTask();
-
-        // append text area
         if( !taskPanel.isTaskEmpty() ) {
-            controller.action( input );
-            textArea.appendTextArea( controller.getDTO().getTextSolution() );
+            String input = taskPanel.getTask();
+            runSwingWorker(input);
         }
+    }
 
-        taskPanel.setEnable(true);
-        taskPanel.update();
+    private void runSwingWorker(String input){
+        SwingWorker< Boolean , Object> worker = new SwingWorker< Boolean , Object>() {
+            @Override
+            protected Boolean doInBackground() {
+                taskPanel.setEnable(false);
+                controller.action( input );
+                return true;
+            }
+            @Override
+            protected void done() {
+                String result = controller.getDTO().getTextSolution();
+                textArea.appendTextArea( result );
+                taskPanel.setEnable(true);
+                taskPanel.clear();
+            }
+        };
+        worker.execute();
 
     }
+
 
     private void initWindowSettings(){
         setTitle(HEADER);

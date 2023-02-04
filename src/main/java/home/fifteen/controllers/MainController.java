@@ -11,19 +11,19 @@ import java.util.Set;
 public class MainController implements Controller{
 
     private final DataTransferObject data;
-    private final Set<View> outputViews;
+    private final Set<View> additionalViews;
 
     private ModelEquation model ;
 
     public MainController(ModelEquation modelEquation){
         model = modelEquation;
         data = new DataTransferObject();
-        outputViews = new HashSet<>();
+        additionalViews = new HashSet<>();
     }
 
 
     @Override
-    public void action(String input ){
+    public void action(String input){
 
         setProperModel(input);
         model.init(input);
@@ -45,14 +45,14 @@ public class MainController implements Controller{
 
     @Override
     public void addView(View view) {
-        outputViews.add(view);
+        additionalViews.add(view);
     }
 
     @Override
     public void invokeAllViews() {
-        for(View view : outputViews){
+        for(View view : additionalViews){
             view.init();
-            view.actionThread();
+            view.action();
         }
     }
 
